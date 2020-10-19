@@ -1,11 +1,13 @@
 package com.grudnov.lessons.exam.fitness;
 
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Fitness {
 
     private LocalTime currentTime;
+    private LocalDate currentDate;
     private Area swimming;
     private Area gym;
     private Area group;
@@ -14,6 +16,10 @@ public class Fitness {
         this.swimming = Objects.requireNonNull(swimming,"swimming must not be null");
         this.gym = Objects.requireNonNull(gym,"gym must not be null");
         this.group = Objects.requireNonNull(group,"group must not be null");
+    }
+
+    public void setCurrentDate(LocalDate currentDate) {
+        this.currentDate = Objects.requireNonNull(currentDate,"currentDate must not be null");
     }
 
     public void setCurrentTime(LocalTime currentTime) {
@@ -37,9 +43,7 @@ public class Fitness {
         }
         if(swimming.findAbonement(abonement) || gym.findAbonement(abonement) ||
                 group.findAbonement(abonement) ) return;
-        if(abonement.checkAbonement(area, currentTime)){
-            abonement.setRegistrTime(currentTime);
-            abonement.setEndTime(ConstantValues.FINISH_ABONEMENT_SINGLE);
+        if(abonement.checkAbonement(area, currentTime, currentDate)){
             abonement.setVisitArea(area.name());
             area.pushAbonement(abonement);
             Logger.getInformAboutAbonement(abonement);

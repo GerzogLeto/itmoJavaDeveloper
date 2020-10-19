@@ -1,25 +1,24 @@
 package com.grudnov.lessons.exam.fitness;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
 public abstract class Abonement implements CheckAbonement {
-    protected LocalTime registrTime;
-    protected LocalTime endTime;
+    protected LocalDate registrDate;
+    protected LocalDate endDate;
     protected OwnerInform ownerInform;
     protected String visitArea;
 
-    public Abonement(OwnerInform ownerInform) {
+    public Abonement(OwnerInform ownerInform, LocalDate registrDate, LocalDate endDate) {
+        this.registrDate = Objects.requireNonNull(registrDate, "registrDate must not be null");
+        this.endDate = Objects.requireNonNull(endDate, "endDate must not be null");
+        if(registrDate.isAfter(endDate)){
+            throw new IllegalArgumentException("registration date must be less than date of end registration");
+        }
         this.ownerInform = Objects.requireNonNull(ownerInform, "ownerInform must not be null");
     }
 
-    public void setRegistrTime(LocalTime registrTime) {
-        this.registrTime = Objects.requireNonNull(registrTime, "registrTime must not be null");
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = Objects.requireNonNull(endTime, "endTime must not be null");
-    }
 
     public void setVisitArea(String visitArea) {
         this.visitArea = visitArea;
@@ -35,8 +34,8 @@ public abstract class Abonement implements CheckAbonement {
                 "ownerInformSurname=" + ownerInform.getSurname() +
                 ", ownerInformName=" + ownerInform.getName() +
                 ", visitArea=" + visitArea +
-                ", registrTime=" + registrTime +
-                ", endTime=" + endTime +
+                ", registrDate=" + registrDate +
+                ", endDate=" + endDate +
                 '}';
     }
 }

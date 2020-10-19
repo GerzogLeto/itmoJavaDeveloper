@@ -1,5 +1,6 @@
 package com.grudnov.lessons.exam.fitness;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 public  class ConstantValues {
@@ -25,6 +26,9 @@ public  class ConstantValues {
 
     public static LocalTime getCurrentTime(){
         return LocalTime.of((int)(5 + Math.random() * 8),(int)(Math.random() * 60));
+    }
+    public static LocalDate getCurrentDate(){
+        return LocalDate.of(2020, (int)(Math.random() * 13),(int)(Math.random() * 28));
     }
 
 }
