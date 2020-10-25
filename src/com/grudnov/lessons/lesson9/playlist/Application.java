@@ -3,6 +3,17 @@ package com.grudnov.lessons.lesson9.playlist;
 import java.util.Arrays;
 
 public class Application {
+    /*Песня:
+название
+продолжительность (в секундах)
+Исполнитель:
+имя
+страна
+ПлейЛист (максимум 10):
+может хранить только уникальные песни (по equals)
+должен иметь возможность отобразить общую продолжительность
+Должна быть возможность дублировать плей листы*/
+
     static String getRandomNameTrack(){
         String[] nameTrack = {"Animals", "Summer Time", "This is Live", "Joker", "Gun", "Lucifer", "Crazy Horse",
                 "Big Boss"};
