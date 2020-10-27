@@ -3,6 +3,12 @@ package com.grudnov.lessons.addtasks.lesson_10.hw2;
 import java.time.LocalTime;
 
 public class Application {
+    /*Есть три рабочие смены :
+с 7:00 до 15:00 утренняя
+с 15:00 до 23:00 дневная
+с 23:00 до 7:00 ночная
+Определить, какая сейчас смена (относительно текущего времени)*/
+
     public static void main(String[] args) {
         LocalTime currentTime = LocalTime.now();
         if(currentTime.isAfter(LocalTime.of(7,00)) &&
