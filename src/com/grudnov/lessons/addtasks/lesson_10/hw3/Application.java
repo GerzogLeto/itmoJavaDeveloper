@@ -7,6 +7,10 @@ import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 
 public class Application {
+    /*Задача 3
+Допустим, наше последнее занятие состоится 21 декабря 2020 года.
+Сколько занятий осталось, если они проходят 3 раза в неделю (пн, ср, пт)?
+Когда состоится защита диплома, если на подготовку дается 2 недели?*/
     public static void main(String[] args) {
         LocalDate currentDate = LocalDate.now();
         LocalDate finishDate = LocalDate.of(2020, Month.DECEMBER,21);
