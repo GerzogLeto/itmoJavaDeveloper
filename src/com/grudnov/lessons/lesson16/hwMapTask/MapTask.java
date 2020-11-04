@@ -1,9 +1,6 @@
 package com.grudnov.lessons.lesson16.hwMapTask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MapTask {
     public static void main(String[] args) {
@@ -73,8 +70,85 @@ public class MapTask {
                 " sometimes on purpose injected humour and the like";
 
         //System.out.println(getListLogins(firstTaskMap,city));
-        System.out.println(getCountWords(words));
+        //System.out.println(getCountWords(words));
+        //System.out.println("word \"and\" occurs " + countWord("and", text) +" times" );
+        //System.out.println(sortWordsByLength(text));
+        //System.out.println(Arrays.toString(topTenWords(text)));
+        countChar(text);
+    }
+    public static void countChar(String text){
+        String[] strings = text.split(" ");
+        int countChars = 0;
+        Set<Character> characters = new TreeSet<>();
+        Map<Character, Integer> characterMap = new TreeMap<>();
+        for (String string : strings) {
+            char[] chars = string.toCharArray();
+            countChars += chars.length;
+            for (char aChar : chars) {
+                characters.add(aChar);
+            }
+        }
+        for (Character character : characters) {
+            int count = 0;
+            for (String string : strings) {
+                for (char ch : string.toCharArray()) {
+                    if(ch == character) count++;
+                }
+            }
+            characterMap.put(character, (int)(count * 100 / countChars));
+        }
+        for (Map.Entry<Character, Integer> entry : characterMap.entrySet()) {
+            System.out.println("char: \'" + entry.getKey() + "\'------" + entry.getValue() + " %");
+        }
 
+    }
+    public static Map<Integer, HashSet<String>> sortWordsByLength(String text){
+        String[] strings = text.split(" ");
+        Map<Integer, HashSet<String>> listMap = new HashMap<>();
+        for (String string : strings) {
+            if(listMap.get(string.length()) == null){
+                listMap.put(string.length(), new HashSet<>());
+                listMap.get(string.length()).add(string);
+            } else {
+                listMap.get(string.length()).add(string);
+            }
+        }
+        return listMap;
+    }
+    public static String[] topTenWords(String text){
+        String[] strings = text.split(" ");
+        NavigableMap<Integer, HashSet<String>> listMap = new TreeMap<>();
+        for (String string : strings) {
+            int key = countWord(string,text);
+            if(listMap.get(key) == null){
+                listMap.put(key, new HashSet<>());
+                listMap.get(key).add(string);
+            } else {
+                listMap.get(key).add(string);
+            }
+        }
+        listMap = listMap.descendingMap();
+        String[] strings1 = new String[10];
+        int count = 0;
+        for (Map.Entry<Integer, HashSet<String>> integerHashSetEntry : listMap.entrySet()) {
+                    for (String s : integerHashSetEntry.getValue()) {
+                        if (count < 10){
+                        strings1[count] = s;
+                        count++;
+                        }
+                    }
+        }
+        return strings1;
+    }
+
+    public static int countWord(String word, String text){
+        int count = 0;
+        String[] strings = text.split(" ");
+        List<String> stringList = new ArrayList<>(Arrays.asList(strings));
+        for (String s : stringList) {
+            if(s.equals(word)) count++;
+        }
+        return count;
     }
 
     public static List<String> getListLogins(HashMap<String, String> hashMap, String city){
