@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Connection implements AutoCloseable {
+public class Connection implements AutoCloseable, Comparable {
     private Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
@@ -16,11 +16,11 @@ public class Connection implements AutoCloseable {
         this.input = new ObjectInputStream(this.socket.getInputStream());
     }
 
-    public SimpleMessage getMessage() throws IOException, ClassNotFoundException {
+    public    SimpleMessage getMessage() throws IOException, ClassNotFoundException {
         return (SimpleMessage) input.readObject();
     }
 
-    public void sendMessage(SimpleMessage message) throws IOException {
+    public     void sendMessage(SimpleMessage message) throws IOException {
         message.setDateTime();
         output.writeObject(message);
         output.flush();
@@ -31,5 +31,10 @@ public class Connection implements AutoCloseable {
         input.close();
         output.close();
         socket.close();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }
