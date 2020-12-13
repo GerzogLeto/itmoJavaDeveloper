@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.TransferQueue;
 
 public class ClientSendMessage implements Runnable {
     private BlockingDeque deque;
@@ -23,7 +24,7 @@ public class ClientSendMessage implements Runnable {
             try{
                 System.out.println("enter message: ");
                 message = scanner.nextLine();
-                send(SimpleMessage.getMessage(name, message, Thread.currentThread().getName()));
+                send(SimpleMessage.getMessage(name, message));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 e.printStackTrace();
@@ -32,9 +33,8 @@ public class ClientSendMessage implements Runnable {
 
     }
     private void send(SimpleMessage message) throws InterruptedException {
-        Connection connection = null;
         try {
-            connection = new Connection(new Socket("127.0.0.1", 8093));
+            Connection connection = new Connection(new Socket("127.0.0.1", 8094));
             connection.sendMessage(message);
             deque.put(connection);
         } catch (IOException e) {

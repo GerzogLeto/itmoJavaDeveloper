@@ -7,17 +7,12 @@ public class SimpleMessage implements Serializable {
     private String sender;
     private String text;
     private LocalDateTime dateTime;
-    private String thread;
 
-    public SimpleMessage(String sender, String text, String thread) {
+    public SimpleMessage(String sender, String text) {
         this.sender = sender;
         this.text = text;
-        this.thread = thread;
     }
 
-    public String getThread() {
-        return thread;
-    }
 
     public String getSender() {
         return sender;
@@ -45,13 +40,13 @@ public class SimpleMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "thread: " + this.thread + "\n" +
+        return
                 "time: " + this.dateTime + "\n" +
                 "sender: " + this.sender + "\n" +
                 "text: " + this.text + "\n";
     }
 
-    public static SimpleMessage getMessage(String sender, String text, String thread) {
-        return new SimpleMessage(sender, text, thread);
+    public static SimpleMessage getMessage(String sender, String text) {
+        return new SimpleMessage(sender, text);
     }
 }

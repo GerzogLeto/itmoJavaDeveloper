@@ -3,34 +3,26 @@ package com.grudnov.lessons.exam.client_server_multithreading;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.LinkedTransferQueue;
-import java.util.concurrent.TransferQueue;
+import java.util.concurrent.*;
 
 public class Server {
 
     public void start() throws Exception {
-        try(ServerSocket serverSocket = new ServerSocket(8093)){
+        try (ServerSocket serverSocket = new ServerSocket(8094)) {
             System.out.println("Server start");
-            //ConcurrentSkipListSet<Connection> connections = new ConcurrentSkipListSet<>();
-            //TransferQueue<SimpleMessage> messages = new LinkedTransferQueue<>();
-            while(true){
+            //ConcurrentSkipListSet<Socket> sockets = new ConcurrentSkipListSet<>();
+            BlockingDeque messages = new LinkedBlockingDeque(1);
+            while (true) {
                 Socket socket = serverSocket.accept();
-              /*  connections.add(new Connection(socket));
-                for (Connection connection : connections) {
-                    SimpleMessage temp = connection.getMessage();
-                    messages.put(temp);
-                    System.out.println(temp);
-                    connection.sendMessage(messages.take());*/
-                try(Connection connection = new Connection(socket)){
-                    System.out.println(connection.getMessage());
-                    connection.sendMessage(SimpleMessage.getMessage("server","message recieved",
-                            Thread.currentThread().getName()));
+                //Connection connection =  new Connection(socket);
+                //connection.sendMessage(connection.getMessage());
+                //sockets.add(socket);
+                    Thread serverReader = new Thread(new ServerReader(socket,messages));
+                    serverReader.start();
+                    Thread serverWriter = new Thread(new ServerWriter(messages));
+                    serverWriter.start();
 
-                }
             }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 

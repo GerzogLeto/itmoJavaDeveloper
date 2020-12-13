@@ -4,19 +4,17 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.*;
 
 public class Client {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        BlockingDeque deque = new LinkedBlockingDeque(1);
+        BlockingDeque deque = new LinkedBlockingDeque(10) ;
+
         try  {
             Thread sendMessage = new Thread( new ClientSendMessage(deque));
-            sendMessage.setName("sendClientThread");
             sendMessage.start();
             Thread getMessage = new Thread( new ClientGetMessage(deque));
-            getMessage.setName("getClientThread");
             getMessage.start();
             sendMessage.join();
             getMessage.join();

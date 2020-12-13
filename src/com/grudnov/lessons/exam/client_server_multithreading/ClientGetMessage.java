@@ -3,6 +3,7 @@ package com.grudnov.lessons.exam.client_server_multithreading;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.TransferQueue;
 
 public class ClientGetMessage implements Runnable {
     private BlockingDeque deque;
@@ -16,8 +17,7 @@ public class ClientGetMessage implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Connection connection = (Connection) deque.take();
-                System.out.println("thread: " + Thread.currentThread().getName() +
-                        "\n" + connection.getMessage());
+                System.out.println(connection.getMessage());
                 connection.close();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
