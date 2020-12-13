@@ -35,6 +35,6 @@ public class Connection implements AutoCloseable, Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return 0;
+        return this.socket.toString().compareTo(o.toString());
     }
 }

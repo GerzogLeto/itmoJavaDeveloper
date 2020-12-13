@@ -9,10 +9,12 @@ import java.util.concurrent.*;
 public class Client {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        BlockingDeque deque = new LinkedBlockingDeque(10) ;
+        TransferQueue deque = new LinkedTransferQueue();
+        Socket socket = new Socket("127.0.0.1", 8096);
+        Connection connection = new Connection(socket);
 
         try  {
-            Thread sendMessage = new Thread( new ClientSendMessage(deque));
+            Thread sendMessage = new Thread( new ClientSendMessage(deque, connection));
             sendMessage.start();
             Thread getMessage = new Thread( new ClientGetMessage(deque));
             getMessage.start();

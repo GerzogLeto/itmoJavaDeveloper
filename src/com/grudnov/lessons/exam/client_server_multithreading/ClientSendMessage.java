@@ -7,10 +7,12 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.TransferQueue;
 
 public class ClientSendMessage implements Runnable {
-    private BlockingDeque deque;
+    private TransferQueue deque;
+    Connection connection;
 
-    public ClientSendMessage(BlockingDeque deque) {
+    public ClientSendMessage(TransferQueue deque, Connection connection) {
         this.deque = deque;
+        this.connection = connection;
     }
 
     @Override
@@ -34,7 +36,6 @@ public class ClientSendMessage implements Runnable {
     }
     private void send(SimpleMessage message) throws InterruptedException {
         try {
-            Connection connection = new Connection(new Socket("127.0.0.1", 8094));
             connection.sendMessage(message);
             deque.put(connection);
         } catch (IOException e) {

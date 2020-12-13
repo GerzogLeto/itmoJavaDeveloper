@@ -6,17 +6,20 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 public class ServerWriter implements Runnable {
     BlockingDeque messages;
+    ConcurrentSkipListSet<Connection> connections;
 
-    public ServerWriter(BlockingDeque messages) {
+    public ServerWriter(BlockingDeque messages,ConcurrentSkipListSet<Connection> connections) {
         this.messages = messages;
+        this.connections = connections;
     }
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
             try {
-                Connection connection = (Connection)messages.take();
-                connection.sendMessage(connection.getMessage());
+                SimpleMessage message = (SimpleMessage)messages.take();
+                for (Connection connection : connections) {
+                    connection.sendMessage(message);
+                }
                 //connection.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -28,7 +31,7 @@ public class ServerWriter implements Runnable {
             }
         }
     }
-}
+
 
 
 

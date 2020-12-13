@@ -8,23 +8,35 @@ import java.util.concurrent.*;
 public class Server {
 
     public void start() throws Exception {
-        try (ServerSocket serverSocket = new ServerSocket(8094)) {
+        try (ServerSocket serverSocket = new ServerSocket(8096)) {
             System.out.println("Server start");
-            //ConcurrentSkipListSet<Socket> sockets = new ConcurrentSkipListSet<>();
+            ConcurrentSkipListSet<Connection> connections = new ConcurrentSkipListSet<>();
             BlockingDeque messages = new LinkedBlockingDeque(1);
+            //Socket socket = serverSocket.accept();
+            //Connection connection = new Connection(socket);
             while (true) {
-                Socket socket = serverSocket.accept();
-                //Connection connection =  new Connection(socket);
-                //connection.sendMessage(connection.getMessage());
-                //sockets.add(socket);
-                    Thread serverReader = new Thread(new ServerReader(socket,messages));
-                    serverReader.start();
-                    Thread serverWriter = new Thread(new ServerWriter(messages));
-                    serverWriter.start();
-
+                Connection connection = new Connection(serverSocket.accept());
+                connections.add(connection);
+                System.out.println("connect added");
+                Thread serverReader = new Thread(new ServerReader(connection, messages));
+                serverReader.start();
+                System.out.println("Reader started ");
+                Thread serverWriter = new Thread(new ServerWriter(messages, connections));
+                serverWriter.start();
+                System.out.println("Writer started ");
+                serverReader.join();
+                serverWriter.join();
             }
+
+            //sockets.add(socket);
+            //Thread serverReader = new Thread(new ServerReader(socket,messages));
+            //serverReader.start();
+            //Thread serverWriter = new Thread(new ServerWriter(messages));
+            //serverWriter.start();
+
         }
     }
+
 
     public static void main(String[] args) {
         Server server = new Server();

@@ -7,25 +7,25 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class ServerReader implements Runnable {
-    private Socket socket;
+    private Connection connection;
     BlockingDeque messages;
 
-    public ServerReader(Socket socket, BlockingDeque messages) {
-        this.socket = socket;
+    public ServerReader(Connection connection, BlockingDeque messages) {
+        this.connection = connection;
         this.messages = messages;
     }
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                messages.put(new Connection(socket));
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Thread.currentThread().interrupt();
-            }
+        try {
+            messages.put(connection.getMessage());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
+
 }
