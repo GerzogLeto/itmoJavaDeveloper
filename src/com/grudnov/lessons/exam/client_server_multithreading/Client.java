@@ -9,15 +9,20 @@ import java.util.concurrent.*;
 public class Client {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        TransferQueue deque = new LinkedTransferQueue();
+        ConcurrentSkipListSet set = new ConcurrentSkipListSet();
         Socket socket = new Socket("127.0.0.1", 8096);
         Connection connection = new Connection(socket);
+        set.add(connection);
 
         try  {
-            Thread sendMessage = new Thread( new ClientSendMessage(deque, connection));
+            Thread sendMessage = new Thread( new ClientSendMessage(set));
+            sendMessage.setName("ClientSenderThread");
             sendMessage.start();
-            Thread getMessage = new Thread( new ClientGetMessage(deque));
+            System.out.println("ClientSenderThread started ");
+            Thread getMessage = new Thread( new ClientGetMessage(set));
+            getMessage.setName("ClientPrintMessage");
             getMessage.start();
+            System.out.println("ClientPrintMessage started ");
             sendMessage.join();
             getMessage.join();
         } catch (InterruptedException e) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Objects;
 
 public class Connection implements AutoCloseable, Comparable {
     private Socket socket;
@@ -34,7 +35,24 @@ public class Connection implements AutoCloseable, Comparable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Connection that = (Connection) o;
+        return socket.equals(that.socket) &&
+                input.equals(that.input) &&
+                output.equals(that.output);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(socket, input, output);
+    }
+
+    @Override
     public int compareTo(Object o) {
         return this.socket.toString().compareTo(o.toString());
     }
+
+
 }

@@ -3,23 +3,24 @@ package com.grudnov.lessons.exam.client_server_multithreading;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.TransferQueue;
 
 public class ClientGetMessage implements Runnable {
-    private TransferQueue deque;
+    private ConcurrentSkipListSet set;
 
-    public ClientGetMessage(TransferQueue deque) {
-        this.deque = deque;
+    public ClientGetMessage(ConcurrentSkipListSet set) {
+        this.set = set;
     }
 
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                System.out.println(((Connection)deque.take()).getMessage());
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                e.printStackTrace();
+                for (Object connection : set) {
+                    Connection connection1  =(Connection)connection;
+                    System.out.println(connection1.getMessage());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

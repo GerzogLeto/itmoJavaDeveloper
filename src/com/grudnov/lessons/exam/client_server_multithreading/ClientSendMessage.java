@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.TransferQueue;
 
 public class ClientSendMessage implements Runnable {
-    private TransferQueue deque;
-    Connection connection;
+    private ConcurrentSkipListSet set;
 
-    public ClientSendMessage(TransferQueue deque, Connection connection) {
-        this.deque = deque;
-        this.connection = connection;
+    public ClientSendMessage(ConcurrentSkipListSet set) {
+        this.set = set;
     }
 
     @Override
@@ -36,8 +35,11 @@ public class ClientSendMessage implements Runnable {
     }
     private void send(SimpleMessage message) throws InterruptedException {
         try {
-            connection.sendMessage(message);
-            deque.put(connection);
+            for (Object connection : set) {
+                Connection connection1 = (Connection) connection;
+                connection1.sendMessage(message);
+                System.out.println(Thread.currentThread().getName() + " send message to server");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

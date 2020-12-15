@@ -3,7 +3,7 @@ package com.grudnov.lessons.exam.client_server_multithreading;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class SimpleMessage implements Serializable {
+public class SimpleMessage implements Serializable, Comparable {
     private String sender;
     private String text;
     private LocalDateTime dateTime;
@@ -48,5 +48,11 @@ public class SimpleMessage implements Serializable {
 
     public static SimpleMessage getMessage(String sender, String text) {
         return new SimpleMessage(sender, text);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        SimpleMessage mes = (SimpleMessage)o;
+        return this.dateTime.compareTo(mes.dateTime);
     }
 }
