@@ -37,10 +37,18 @@ public class ClientSendMessage implements Runnable {
         try {
             for (Object connection : set) {
                 Connection connection1 = (Connection) connection;
+                if(message.getText().equals("exit")){
+                    connection1.sendMessage(SimpleMessage.getMessage(message.getSender(), "exit"));
+                    connection1.close();
+                    set.remove(connection);
+                    Thread.currentThread().interrupt();
+                }
                 connection1.sendMessage(message);
                 System.out.println(Thread.currentThread().getName() + " send message to server");
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //System.out.println(connection.getMessage());

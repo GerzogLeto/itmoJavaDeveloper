@@ -22,11 +22,14 @@ public class ServerWriter implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 SimpleMessage message = (SimpleMessage) messages.take();
+                if(message.getText().equals("exit")){
+                    break;
+                }
                 System.out.println(Thread.currentThread().getName() + " take message from queue");
                 for (Map.Entry<String, Connection> entry : connections.entrySet()) {
                     if(!(entry.getKey().equals(message.getSender()))){
-                        entry.getValue().sendMessage(message);
-                        System.out.println(Thread.currentThread().getName() + " send message");
+                            entry.getValue().sendMessage(message);
+                            System.out.println(Thread.currentThread().getName() + " send message");
                     }
                 }
                 //connection.close();
@@ -41,6 +44,9 @@ public class ServerWriter implements Runnable {
             }
 
         }
+        connections.remove(connection);
+        //connection.close();
+
     }
 }
 

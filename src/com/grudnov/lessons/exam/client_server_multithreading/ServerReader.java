@@ -24,6 +24,11 @@ public class ServerReader implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 SimpleMessage message = connection.getMessage();
+                if(message.getText().equals("exit")){
+                    messages.put(message);
+                    Thread.sleep(500);
+                    break;
+                }
                 connections.put(message.getSender(), connection);
                 System.out.println(Thread.currentThread().getName() + " connection added to Map");
                     messages.put(message);

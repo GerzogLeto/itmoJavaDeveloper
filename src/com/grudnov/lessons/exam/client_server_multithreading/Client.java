@@ -24,6 +24,7 @@ public class Client {
             getMessage.start();
             System.out.println("ClientPrintMessage started ");
             sendMessage.join();
+            getMessage.interrupt();
             getMessage.join();
         } catch (InterruptedException e) {
             e.printStackTrace();

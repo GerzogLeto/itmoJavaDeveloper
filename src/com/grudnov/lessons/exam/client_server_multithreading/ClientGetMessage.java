@@ -19,7 +19,8 @@ public class ClientGetMessage implements Runnable {
             try {
                 for (Object connection : set) {
                     Connection connection1  =(Connection)connection;
-                    System.out.println(connection1.getMessage());
+                    SimpleMessage message = connection1.getMessage();
+                    System.out.println(message);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
