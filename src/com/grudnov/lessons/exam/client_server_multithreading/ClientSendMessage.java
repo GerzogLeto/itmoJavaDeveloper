@@ -1,11 +1,8 @@
 package com.grudnov.lessons.exam.client_server_multithreading;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.TransferQueue;
 
 public class ClientSendMessage implements Runnable {
     private ConcurrentSkipListSet set;
@@ -25,6 +22,9 @@ public class ClientSendMessage implements Runnable {
             try{
                 System.out.println("enter message: ");
                 message = scanner.nextLine();
+                if(message.equals("exit")){
+                    break;
+                }
                 send(SimpleMessage.getMessage(name, message));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -37,12 +37,6 @@ public class ClientSendMessage implements Runnable {
         try {
             for (Object connection : set) {
                 Connection connection1 = (Connection) connection;
-                if(message.getText().equals("exit")){
-                    connection1.sendMessage(SimpleMessage.getMessage(message.getSender(), "exit"));
-                    connection1.close();
-                    set.remove(connection);
-                    Thread.currentThread().interrupt();
-                }
                 connection1.sendMessage(message);
                 System.out.println(Thread.currentThread().getName() + " send message to server");
             }
@@ -51,7 +45,6 @@ public class ClientSendMessage implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //System.out.println(connection.getMessage());
     }
 
 }

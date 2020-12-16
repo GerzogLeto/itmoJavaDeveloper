@@ -1,16 +1,14 @@
 package com.grudnov.lessons.exam.client_server_multithreading;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.LinkedBlockingDeque;
 
 public class ServerReader implements Runnable {
     private Connection connection;
     private BlockingDeque messages;
     private ConcurrentHashMap<String, Connection> connections;
+    private String sender;
 
     public ServerReader(Connection connection, BlockingDeque messages,
                         ConcurrentHashMap<String, Connection> connections) {
@@ -24,11 +22,7 @@ public class ServerReader implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 SimpleMessage message = connection.getMessage();
-                if(message.getText().equals("exit")){
-                    messages.put(message);
-                    Thread.sleep(500);
-                    break;
-                }
+                this.sender = message.getSender();
                 connections.put(message.getSender(), connection);
                 System.out.println(Thread.currentThread().getName() + " connection added to Map");
                     messages.put(message);
@@ -38,7 +32,14 @@ public class ServerReader implements Runnable {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                try {
+                    messages.put(SimpleMessage.getMessage(this.sender,"exit"));
+                    connections.remove(sender);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+                Thread.currentThread().interrupt();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

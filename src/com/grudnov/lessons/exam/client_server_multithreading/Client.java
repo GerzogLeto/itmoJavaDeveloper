@@ -2,8 +2,6 @@ package com.grudnov.lessons.exam.client_server_multithreading;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class Client {
@@ -25,8 +23,10 @@ public class Client {
             System.out.println("ClientPrintMessage started ");
             sendMessage.join();
             getMessage.interrupt();
-            getMessage.join();
+            connection.close();
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

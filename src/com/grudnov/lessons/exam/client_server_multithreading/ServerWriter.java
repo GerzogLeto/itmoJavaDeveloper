@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 public class ServerWriter implements Runnable {
     BlockingDeque messages;
@@ -22,9 +21,7 @@ public class ServerWriter implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 SimpleMessage message = (SimpleMessage) messages.take();
-                if(message.getText().equals("exit")){
-                    break;
-                }
+                if(message.getText().equals("text"))break;
                 System.out.println(Thread.currentThread().getName() + " take message from queue");
                 for (Map.Entry<String, Connection> entry : connections.entrySet()) {
                     if(!(entry.getKey().equals(message.getSender()))){
@@ -32,7 +29,6 @@ public class ServerWriter implements Runnable {
                             System.out.println(Thread.currentThread().getName() + " send message");
                     }
                 }
-                //connection.close();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -45,7 +41,6 @@ public class ServerWriter implements Runnable {
 
         }
         connections.remove(connection);
-        //connection.close();
 
     }
 }

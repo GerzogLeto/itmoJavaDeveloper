@@ -1,10 +1,6 @@
 package com.grudnov.lessons.exam.client_server_multithreading;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.TransferQueue;
 
 public class ClientGetMessage implements Runnable {
     private ConcurrentSkipListSet set;
